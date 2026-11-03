@@ -1,0 +1,20 @@
+{
+  "name": "@{{ project-name | kebab_case }}/ui",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./button": "./src/button.tsx",
+    "./lib/utils": "./src/lib/utils.ts"
+  },
+  "dependencies": {
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "tailwind-merge": "3.7.0"
+  },
+  "peerDependencies": {
+    "react": ">=19"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0"
+  }
+}

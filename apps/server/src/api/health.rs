@@ -1,0 +1,108 @@
+use axum::extract::State;
+use axum::routing::get;
+use axum::{Json, Router};
+use serde::Serialize;
+
+use crate::error::AppResult;
+use crate::state::AppState;
+
+pub fn router() -> Router<AppState> {
+    Router::new()
+        .route("/health", get(health))
+        .route("/info", get(info))
+}
+
+#[derive(Serialize)]
+struct Health {
+    status: &'static str,
+    version: &'static str,
+    uptime_secs: u64,
+}
+
+async fn health(State(state): State<AppState>) -> AppResult<Json<Health>> {
+    Ok(Json(Health {
+        status: "ok",
+        version: env!("CARGO_PKG_VERSION"),
+        uptime_secs: state.uptime_secs(),
+    }))
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+struct Info {
+    name: &'static str,
+    version: &'static str,
+    addr: String,
+}
+
+/// 只暴露非敏感配置，可用于确认部署环境读到了哪份 `.env`。
+async fn info(State(state): State<AppState>) -> AppResult<Json<Info>> {
+    Ok(Json(Info {
+        name: env!("CARGO_PKG_NAME"),
+        version: env!("CARGO_PKG_VERSION"),
+        addr: state.config.addr(),
+    }))
+}
+
+#[cfg(test)]
+mod tests {
+    use std::sync::Arc;
+    use std::time::Instant;
+
+    use axum::body::Body;
+    use axum::http::{Request, StatusCode};
+    use http_body_util::BodyExt;
+    use tower::ServiceExt;
+
+    use crate::app;
+    use crate::config::Config;
+    use crate::state::AppState;
+
+    fn state() -> AppState {
+        AppState {
+            config: Arc::new(Config {
+                host: "127.0.0.1".to_owned(),
+                port: 3000,
+                log_filter: "info".to_owned(),
+            }),
+            started_at: Instant::now(),
+        }
+    }
+
+    async fn get(path: &str) -> (StatusCode, serde_json::Value) {
+        let response = app::router(state())
+            .oneshot(
+                Request::builder()
+                    .uri(path)
+                    .body(Body::empty())
+                    .expect("request builds"),
+            )
+            .await
+            .expect("router is infallible");
+        let status = response.status();
+        let bytes = response
+            .into_body()
+            .collect()
+            .await
+            .expect("body collects")
+            .to_bytes();
+        let json = serde_json::from_slice(&bytes).expect("body is json");
+        (status, json)
+    }
+
+    #[tokio::test]
+    async fn health_is_ok() {
+        let (status, json) = get("/api/health").await;
+        assert_eq!(status, StatusCode::OK);
+        assert_eq!(json["status"], "ok");
+        assert!(json["version"].is_string());
+        assert!(json["uptime_secs"].is_u64());
+    }
+
+    #[tokio::test]
+    async fn info_reports_configured_addr() {
+        let (status, json) = get("/api/info").await;
+        assert_eq!(status, StatusCode::OK);
+        assert_eq!(json["addr"], "127.0.0.1:3000");
+    }
+}

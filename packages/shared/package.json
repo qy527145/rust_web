@@ -1,0 +1,8 @@
+{
+  "name": "@{{ project-name | kebab_case }}/shared",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

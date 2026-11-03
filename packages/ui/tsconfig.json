@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": [],
+    "paths": {
+      "@{{ project-name | kebab_case }}/ui/*": ["../../packages/ui/src/*"]
+    }
+  },
+  "include": ["src"]
+}

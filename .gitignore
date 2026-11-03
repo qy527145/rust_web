@@ -1,0 +1,21 @@
+# Rust
+/target
+
+# Node / Bun
+node_modules/
+.turbo/
+*.tsbuildinfo
+
+# Build output
+/dist/
+/apps/web/dist/*
+!/apps/web/dist/.gitkeep
+
+# Local overrides & secrets
+.env.local
+.env.*.local
+
+# Misc
+*.log
+.DS_Store
+.idea/

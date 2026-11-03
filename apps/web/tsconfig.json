@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["vite/client"],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@{{ project-name | kebab_case }}/ui/*": ["../../packages/ui/src/*"],
+      "@{{ project-name | kebab_case }}/shared": ["../../packages/shared/src/index.ts"]
+    }
+  },
+  "include": ["src", "vite.config.ts"]
+}
