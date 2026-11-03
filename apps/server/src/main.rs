@@ -26,7 +26,11 @@ async fn main() -> anyhow::Result<()> {
     let local_addr = listener.local_addr()?;
 
     tracing::info!(addr = %local_addr, "listening");
-    tracing::info!(version = env!("CARGO_PKG_VERSION"), "{{project-name}} started");
+    tracing::info!(
+        version = env!("CARGO_PKG_VERSION"),
+        "{} started",
+        env!("CARGO_PKG_NAME")
+    );
 
     let state = AppState {
         config: Arc::new(config),

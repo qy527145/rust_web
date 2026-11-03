@@ -1,5 +1,6 @@
-import { cn } from "@{{ project-name | kebab_case }}/ui/lib/utils";
 import { describe, expect, test } from "bun:test";
+
+import { cn } from "@{{ project-name | kebab_case }}/ui/lib/utils";
 
 describe("cn", () => {
   test("合并条件类名", () => {

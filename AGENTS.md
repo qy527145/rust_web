@@ -31,7 +31,7 @@ bun run build        # 当前平台单二进制 → dist/
 bun run build:win    # 见 README「交叉编译」的宿主限制
 bun run build:mac
 bun run build:linux
-bun run check        # tsc --noEmit + cargo fmt --check + clippy -D warnings
+bun run check        # biome check + tsc --noEmit + cargo fmt --check + clippy -D warnings
 bun run test         # cargo test + bun test
 bun run lint         # biome check
 bun run fmt          # biome --write + cargo fmt

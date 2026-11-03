@@ -46,6 +46,6 @@ console.log(`
 完成。下一步：
 
   bun run dev       # 开发模式（Vite + axum）
-  bun run check     # 类型检查 + clippy
+  bun run check     # lint + 类型检查 + clippy
   bun run build     # 单二进制构建
 `);

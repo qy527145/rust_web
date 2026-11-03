@@ -3,6 +3,8 @@ import type { Health } from "@{{ project-name | kebab_case }}/shared";
 import { Button } from "@{{ project-name | kebab_case }}/ui/button";
 import { useCallback, useEffect, useState } from "react";
 
+const PROJECT_NAME = "{{project-name}}";
+
 type Status =
   | { kind: "loading" }
   | { kind: "ok"; data: Health }
@@ -35,7 +37,7 @@ export default function App() {
     <main className="mx-auto flex min-h-screen max-w-2xl flex-col justify-center gap-8 px-6">
       <header className="space-y-2">
         <p className="text-sm text-muted-foreground">Rust · Axum · Vite · React · Turbo</p>
-        <h1 className="text-4xl font-semibold tracking-tight">{"{{project-name}}"}</h1>
+        <h1 className="text-4xl font-semibold tracking-tight">{PROJECT_NAME}</h1>
         <p className="text-muted-foreground">
           编辑 <code className="rounded bg-muted px-1.5 py-0.5 text-sm">apps/server/src</code> 或{" "}
           <code className="rounded bg-muted px-1.5 py-0.5 text-sm">apps/web/src</code> 开始开发。

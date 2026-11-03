@@ -15,7 +15,7 @@
     "build:win": "bun run scripts/build.ts win",
     "build:mac": "bun run scripts/build.ts mac",
     "build:linux": "bun run scripts/build.ts linux",
-    "check": "turbo run check",
+    "check": "biome check . && turbo run check",
     "test": "turbo run test",
     "lint": "biome check .",
     "fmt": "biome check --write . && cargo fmt --all",
